@@ -17,3 +17,5 @@ def plot_average_positions(fig, ax, avg_locations, team):
         ax.invert_yaxis()
 
     add_ax_title(ax, 'Average Positions')
+    
+    add_arrow(ax, team)

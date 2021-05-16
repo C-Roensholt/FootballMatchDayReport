@@ -147,8 +147,9 @@ def plot_pass_network_1(fig, ax, avg_locations, pass_between, team='home'):
         ax.invert_xaxis()
         ax.invert_yaxis()
 
-    
     add_ax_title(ax, 'Passing Network')
+    
+    add_arrow(ax, team)
     
     return None
 

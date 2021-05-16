@@ -16,9 +16,9 @@ def plot_bar(fig, ax, home_stats, away_stats):
     ax.patch.set_facecolor(pitch_background_color)
 
     bar_home = ax.barh(bar_stats, home_per, height=0.6,
-                       alpha=1, facecolor=home_color, edgecolor='k', linewidth=1.5)
+                       alpha=1, facecolor=home_color, edgecolor='k', linewidth=2)
     bar_away = ax.barh(bar_stats, away_per, height=0.6,
-                       alpha=1, facecolor=away_color, edgecolor='k', linewidth=1.5,
+                       alpha=1, facecolor=away_color, edgecolor='k', linewidth=2,
                        left=home_per)
     
     ax.set_frame_on(False)
@@ -36,6 +36,9 @@ def plot_bar(fig, ax, home_stats, away_stats):
     for i, away_stat in enumerate(away_num_stats):
         ax.text(0.95, i-0.5, s=f'{away_stat}', ha='center', va='center',
                 fontsize=24, fontweight='bold')
+        
+    
+    add_ax_title(ax, 'Match Stats')
     
     return None
 """

@@ -29,3 +29,15 @@ def add_ax_title(ax, title):
                     zorder=1
                 ))
     return ax_title
+
+def add_arrow(ax, team):
+    if team == 'home':
+        ax_arrow = ax.arrow(x=25, y=50, dx=50, dy=0, length_includes_head=True,
+                            width=5, head_length=8.5,
+                            facecolor=(1, 1, 1, 0.1), edgecolor=(0,0,0,1), zorder=2)
+    if team == 'away':
+        ax_arrow = ax.arrow(x=25, y=50, dx=50, dy=0, length_includes_head=True,
+                            width=5, head_length=8.5,
+                            facecolor=(1, 1, 1, 0.1), edgecolor=(0,0,0,1), zorder=2)
+        
+    return ax_arrow

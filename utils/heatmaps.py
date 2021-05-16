@@ -21,4 +21,5 @@ def plot_heatmap(fig, ax, actions, team: str, heatmap_type: str):
     
     add_ax_title(ax, TYPE[heatmap_type])
     
+    add_arrow(ax, team)
 
