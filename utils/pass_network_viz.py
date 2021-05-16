@@ -107,7 +107,7 @@ def plot_pass_network_1(fig, ax, avg_locations, pass_between, team='home'):
         
         alpha = link
         if alpha > 1:
-            alpha=1
+            alpha=0.8
         
         if abs(pass_between.iloc[i].x_end - pass_between.iloc[i].x) > abs(pass_between.iloc[i].y_end - pass_between.iloc[i].y):
 
