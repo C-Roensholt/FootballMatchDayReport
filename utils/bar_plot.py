@@ -15,9 +15,9 @@ def plot_bar(fig, ax, home_stats, away_stats):
     fig.set_facecolor(pitch_background_color)
     ax.patch.set_facecolor(pitch_background_color)
 
-    bar_home = ax.barh(bar_stats, home_per, height=0.8,
+    bar_home = ax.barh(bar_stats, home_per, height=0.6,
                        alpha=1, facecolor=home_color, edgecolor='k', linewidth=1.5)
-    bar_away = ax.barh(bar_stats, away_per, height=0.8,
+    bar_away = ax.barh(bar_stats, away_per, height=0.6,
                        alpha=1, facecolor=away_color, edgecolor='k', linewidth=1.5,
                        left=home_per)
     
@@ -26,16 +26,16 @@ def plot_bar(fig, ax, home_stats, away_stats):
     ax.tick_params(axis='y', colors='w', labelsize=14)
     # Add bar labels in middle
     for i, stat in enumerate(bar_stats):
-        ax.text(0.5, i, s=f'{stat}', ha='center', va='center',
-                fontsize=18, fontweight='bold')
+        ax.text(0.5, i-0.5, s=f'{stat}', ha='center', va='center',
+                fontsize=20, fontweight='bold')
 
     # Add home and away stats
     for i, home_stat in enumerate(home_num_stats):
-        ax.text(0.05, i, s=f'{home_stat}', ha='center', va='center',
-                fontsize=24, fontweight='regular')
+        ax.text(0.05, i-0.5, s=f'{home_stat}', ha='center', va='center',
+                fontsize=24, fontweight='bold')
     for i, away_stat in enumerate(away_num_stats):
-        ax.text(0.95, i, s=f'{away_stat}', ha='center', va='center',
-                fontsize=24, fontweight='regular')
+        ax.text(0.95, i-0.5, s=f'{away_stat}', ha='center', va='center',
+                fontsize=24, fontweight='bold')
     
     return None
 """

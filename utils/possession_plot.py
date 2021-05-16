@@ -4,6 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from utils.metadata import *
 from matplotlib.patches import Rectangle
+from matplotlib.offsetbox import OffsetImage, AnnotationBbox
 import numpy as np
 #from extract_data import *
 
@@ -65,6 +66,27 @@ def plot_possession(fig, ax, df_home_poss, df_away_poss, added_time: list):
 
     return None
 
+
+def imscatter(x, y, image, ax=None, zoom=1):
+    if ax is None:
+        ax = plt.gca()
+    try:
+        image = plt.imread(image)
+    except TypeError:
+        # Likely already an array...
+        pass
+    im = OffsetImage(image, zoom=zoom)
+    x, y = np.atleast_1d(x, y)
+    artists = []
+    for x0, y0 in zip(x, y):
+        ab = AnnotationBbox(im, (x0, y0), xycoords='data', frameon=False)
+        artists.append(ax.add_artist(ab))
+    ax.update_datalim(np.column_stack([x, y]))
+    ax.autoscale()
+    return artists
+
+
+
 from scipy.interpolate import make_interp_spline, BSpline
 def plot_momentum(fig, ax, df_home_poss, df_away_poss, home_goals, away_goals, added_time: list):
     fig.set_facecolor(pitch_background_color)
@@ -123,9 +145,11 @@ def plot_momentum(fig, ax, df_home_poss, df_away_poss, home_goals, away_goals, a
     
     # Add goals
     home_y = [ymax for _ in range(len(home_goals))]
-    ax.scatter(x=home_goals, y=home_y, s=200, facecolor=home_color, edgecolor='k')
+    #ax.scatter(x=home_goals, y=home_y, s=200, facecolor=home_color, edgecolor='k')
+    imscatter(x=home_goals, y=home_y, image='utils/football.png', ax=ax, zoom=0.1)
     away_y = [ymin for _ in range(len(away_goals))]
-    ax.scatter(x=away_goals, y=away_y, s=200, facecolor=away_color, edgecolor='k')
+    imscatter(x=away_goals, y=away_y, image='utils/football.png', ax=ax, zoom=0.1)
+    #ax.scatter(x=away_goals, y=away_y, s=200, facecolor=away_color, edgecolor='k')
     
     # Add lines for goals
     '''

@@ -30,8 +30,8 @@ def plot_radar(fig, ax, pvals: list, team):
     text_colors = ['k']*8
     bg_colors = ['w']*8
 
-    params = ['Kant spil', 'Dybt spil', 'Lange bolde', 'Kontra',
-              'Indlæg', 'Danger Zone', 'Dybt forsvar', 'Højt pres']
+    params = ['Wing Play', 'Deep Play', 'Long Balls', 'Counter',
+              'Crosses', 'Key Passes', 'Low Block', 'High Press']
     
     # instantiate PyPizza class
     baker = PyPizza(
