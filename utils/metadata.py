@@ -8,7 +8,7 @@ pitch_line_color = '#000000'
 home_color = '#1565c0'
 away_color = '#c62828'
 
-bar_stats = ['Mål', 'Skud', 'Skud på mål', 'Afleveringer', 'Afleveringer', 'Afleveringer']
+bar_stats = ['Afleveringer', 'Skud på mål', 'Skud', 'Mål']
 
 def add_ax_title(ax, title):
     # Add title

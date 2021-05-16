@@ -150,11 +150,11 @@ def get_bar_plot_data(df_home: pd.DataFrame, df_away: pd.DataFrame) -> list:
     per_home_passes = num_home_passes / total_passes
     per_away_passes = num_away_passes / total_passes
     
-    home_num_stats = [num_home_goals, num_home_shots, num_home_shots_target, num_home_passes, num_home_passes, num_home_passes]
-    away_num_stats = [num_away_goals, num_away_shots, num_away_shots_target, num_away_passes, num_away_passes, num_away_passes]
+    home_num_stats = [num_home_passes, num_home_shots_target, num_home_shots, num_home_goals]
+    away_num_stats = [num_away_passes, num_away_shots_target, num_away_shots, num_away_goals]
     
-    home_percentages = [per_home_goals, per_home_shots, per_home_target, per_home_passes, per_home_passes, per_home_passes]
-    away_percentages = [per_away_goals, per_away_shots, per_away_target, per_away_passes, per_away_passes, per_away_passes]
+    home_percentages = [per_home_passes, per_home_target, per_home_shots, per_home_goals]
+    away_percentages = [per_away_passes, per_away_target, per_away_shots, per_away_goals]
     
     home_stats = zip(home_num_stats, home_percentages)
     away_stats = zip(away_num_stats, away_percentages)
