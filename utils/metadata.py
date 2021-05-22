@@ -8,14 +8,14 @@ pitch_line_color = '#000000'
 home_color = '#1565c0'
 away_color = '#c62828'
 
-bar_stats = ['Passes', 'Shots On Target', 'Shots', 'Goals']
+bar_stats = ['PPDA', 'Passes', 'Shots On Target', 'Shots', 'Expected Goals', 'Goals']
 
 def add_ax_title(ax, title):
     # Add title
     ax_title = ax.set_title(
                 title,
                 color=text_color,
-                alpha=0.75,
+                alpha=1,
                 weight=600,
                 fontsize=12,
                 pad=8,

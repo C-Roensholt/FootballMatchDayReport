@@ -114,14 +114,52 @@ def get_pass_network_data(df_home: pd.DataFrame, df_away: pd.DataFrame):
 
 #home_avg_locations, home_pass_between, away_avg_locations, away_pass_between = passNetworkData('2021', 'gw23')
 
-def get_bar_plot_data(df_home: pd.DataFrame, df_away: pd.DataFrame) -> list:
+def get_bar_plot_data(df_home: pd.DataFrame, df_away: pd.DataFrame, gw: str) -> list:
+
+    df = pd.read_csv(f'C:/Users/rcr1/Skrivebord/football_analytics/data/understat/liverpool/{gw}.csv')
     
-    num_home_passes = len(df_home[(df_home['events'].str.contains('116', na=False)) | (df_home['events'].str.contains('119', na=False))])
-    num_away_passes = len(df_away[(df_away['events'].str.contains('116', na=False)) | (df_away['events'].str.contains('119', na=False))])
+    home_team = df['team'].iloc[0]
+    away_team = df['team'].iloc[-1]
     
+    df_home_understat = df[df['team'] == home_team].reset_index(drop=True)
+    df_away_understat = df[df['team'] == away_team].reset_index(drop=True)
+
+    home_xg = round(df_home_understat['xG'].sum(), 2)
+    away_xg = round(df_away_understat['xG'].sum(), 2)
+    total_xg = home_xg + away_xg
+    
+    # Passes
+    df_home_passes = df_home[(df_home['events'].str.contains('116', na=False)) | (df_home['events'].str.contains('119', na=False))]
+    df_away_passes = df_away[(df_away['events'].str.contains('116', na=False)) | (df_away['events'].str.contains('119', na=False))]
+    home_passes_deep = len(df_home_passes[df_home_passes['x'] < 50])
+    away_passes_deep = len(df_away_passes[df_away_passes['x'] < 50])
+    
+    # PPDA
+    df_home_def_actions = df_home[(df_home['events'].str.contains('141')) | (df_home['events'].str.contains('142'))
+                                  |(df_home['events'].str.contains('100'))| (df_home['events'].str.contains('57'))
+                                  |(df_home['events'].str.contains('55')) | (df_home['events'].str.contains('59'))
+                                  |(df_home['events'].str.contains('94'))]
+    df_away_def_actions = df_away[(df_away['events'].str.contains('141')) | (df_away['events'].str.contains('142'))
+                                  |(df_away['events'].str.contains('100'))| (df_away['events'].str.contains('57'))
+                                  |(df_away['events'].str.contains('55')) | (df_away['events'].str.contains('59'))
+                                  |(df_away['events'].str.contains('94'))]
+
+    home_def_actions = len(df_home_def_actions[df_home_def_actions['x'] > 50])
+    away_def_actions = len(df_away_def_actions[df_away_def_actions['x'] > 50])
+    #calculate PPDA
+    home_ppda = round(away_passes_deep / home_def_actions, 1)
+    away_ppda = round(home_passes_deep / away_def_actions, 1)
+    total_ppda = home_ppda + away_ppda
+    
+    # Passes
+    num_home_passes = len(df_home_passes)
+    num_away_passes = len(df_away_passes)
+    
+    # Shots
     df_home_shots = df_home[df_home['isShot'] == True]
     df_away_shots = df_away[df_away['isShot'] == True]
     
+    # Goals
     df_home_goals = df_home_shots[df_home_shots['events'].str.contains(r'15|16|17|18|19|21|22|23|24|25|26')]
     df_away_goals = df_away_shots[df_away_shots['events'].str.contains(r'15|16|17|18|19|21|22|23|24|25|26')]
     
@@ -129,7 +167,7 @@ def get_bar_plot_data(df_home: pd.DataFrame, df_away: pd.DataFrame) -> list:
     num_away_shots = len(df_away_shots)
     
     num_home_goals = len(df_home_goals)
-    num_away_goals = len(df_away_goals)
+    num_away_goals = len(df_away_goals) - 1
     
     num_home_shots_target = len(df_home[df_home['events'].str.contains('8', na=False, regex=True)])
     num_away_shots_target = len(df_away[df_away['events'].str.contains('8', na=False, regex=True)])
@@ -149,12 +187,16 @@ def get_bar_plot_data(df_home: pd.DataFrame, df_away: pd.DataFrame) -> list:
     per_away_target = num_away_shots_target / total_target
     per_home_passes = num_home_passes / total_passes
     per_away_passes = num_away_passes / total_passes
+    per_home_xg = home_xg / total_xg
+    per_away_xg = away_xg / total_xg
+    per_home_ppda = home_ppda / total_ppda
+    per_away_ppda = away_ppda / total_ppda
     
-    home_num_stats = [num_home_passes, num_home_shots_target, num_home_shots, num_home_goals]
-    away_num_stats = [num_away_passes, num_away_shots_target, num_away_shots, num_away_goals]
+    home_num_stats = [home_ppda, num_home_passes, num_home_shots_target, num_home_shots, home_xg, num_home_goals]
+    away_num_stats = [away_ppda, num_away_passes, num_away_shots_target, num_away_shots, away_xg, num_away_goals]
     
-    home_percentages = [per_home_passes, per_home_target, per_home_shots, per_home_goals]
-    away_percentages = [per_away_passes, per_away_target, per_away_shots, per_away_goals]
+    home_percentages = [per_home_ppda, per_home_passes, per_home_target, per_home_shots, per_home_xg, per_home_goals]
+    away_percentages = [per_away_ppda, per_away_passes, per_away_target, per_away_shots, per_away_xg, per_away_goals]
     
     home_stats = zip(home_num_stats, home_percentages)
     away_stats = zip(away_num_stats, away_percentages)
@@ -406,55 +448,19 @@ def get_heatmap_data(df_home, df_away):
 
     return df_home_actions, df_away_actions
 
-def euclidean(x1, y1, x2, y2):
-    return np.sqrt(np.power((x1-x2), 2) + np.power((y1-y2), 2))
-
-def pass_angle(df):
-    vector1 = [
-        df['endX'] - df['x'],
-        df['endY'] - df['y']
-    ]
-    vector2 = [1, 0]
-
-    cosTh = np.dot(vector1, vector2)
-    sinTh = np.cross(vector1, vector2)
-
-    return np.rad2deg(np.arctan2(sinTh,cosTh))
-
-def calculate_features(df):
-    df.loc[:, 'angle'] = df.apply(pass_angle, axis=1)
+def get_juego(df):
+    
+    df['prevShot'] = df['isShot'].shift(-1)
+    df = df[df['prevShot'] == True]
+    
     return df
 
 
-from sklearn.cluster import KMeans
-def get_frequent_passes(df_home, df_away):
-    # Get passes
-    df_home_passes = df_home[(df_home['events'].str.contains('116', na=False)) | (df_home['events'].str.contains('119', na=False))]
-    df_away_passes = df_away[(df_away['events'].str.contains('116', na=False)) | (df_away['events'].str.contains('119', na=False))]
-
-    # Calcule pass angle
-    df_home_passes = calculate_features(df_home_passes)
-    df_away_passes = calculate_features(df_away_passes)
-    
-    # Perform clustering
-    X_home = np.array(df_home_passes[['x','y','endX','endY', 'angle']])
-    kmeans_home = KMeans(n_clusters=10, random_state=100)
-    kmeans_home.fit(X_home)
-    df_home_passes['cluster'] = kmeans_home.predict(X_home)
-
-    X_away = np.array(df_away_passes[['x','y','endX','endY', 'angle']])
-    kmeans_away = KMeans(n_clusters=10, random_state=100)
-    kmeans_away.fit(X_away)
-    df_away_passes['cluster'] = kmeans_away.predict(X_away)
-
-
-    return df_home_passes, df_away_passes
 
 '''
 df_home, df_away = load_data('2021', 'gw23')
-
-df_home_cluster, df_away_cluster = get_frequent_passes(df_home, df_away)
-df_away_cluster
+df = get_pass_zones(df_home)
+print(df.shape)
 '''
 #%%
 def main():

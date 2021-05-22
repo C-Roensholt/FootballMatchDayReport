@@ -4,6 +4,7 @@ import numpy as np
 from utils.extract_data import load_data, get_bar_plot_data
 from utils.metadata import *
 import matplotlib.pyplot as plt
+import matplotlib.patheffects as path_effects
 
 def plot_bar(fig, ax, home_stats, away_stats):
     
@@ -27,15 +28,15 @@ def plot_bar(fig, ax, home_stats, away_stats):
     # Add bar labels in middle
     for i, stat in enumerate(bar_stats):
         ax.text(0.5, i-0.5, s=f'{stat}', ha='center', va='center',
-                fontsize=20, fontweight='bold')
+                fontsize=16, fontweight='bold')
 
     # Add home and away stats
     for i, home_stat in enumerate(home_num_stats):
-        ax.text(0.05, i-0.5, s=f'{home_stat}', ha='center', va='center',
-                fontsize=24, fontweight='bold')
+        ax.text(0.05, i-0.525, s=f'{home_stat}', ha='center', va='center',
+                fontsize=20, fontweight='bold')
     for i, away_stat in enumerate(away_num_stats):
-        ax.text(0.95, i-0.5, s=f'{away_stat}', ha='center', va='center',
-                fontsize=24, fontweight='bold')
+        ax.text(0.95, i-0.525, s=f'{away_stat}', ha='center', va='center',
+                fontsize=20, fontweight='bold')
         
     
     add_ax_title(ax, 'Match Stats')
